@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import Login from "./Pages/Login";
+import Home from "./Pages/Home";
+import Errorpage from "./Pages/Errorpage";
+import { Routes, Route } from "react-router-dom";
+import Register from "./Pages/Register";
+import Phoneauth from "./Components/Phoneauth";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const [showPhoneModal, setShowPhoneModal] = useState(false)
+  const [showPhoneModalCode, setShowPhoneModalCode] = useState(false)
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem('picture')) {
+      return navigate("/login");
+    }
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {showPhoneModal ? <Phoneauth setShowPhoneModal={setShowPhoneModal} showPhoneModalCode={showPhoneModalCode} setShowPhoneModalCode={setShowPhoneModalCode} showPhoneModal={showPhoneModal} /> : null}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login setShowPhoneModal={setShowPhoneModal} showPhoneModal={showPhoneModal} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/*" element={<Errorpage />} />
+      </Routes>
     </div>
   );
 }
